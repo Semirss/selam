@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "home": "ዋና",
+    "wellness": "ደህንነት",
+    "healthId": "የጤና መታወቂያ",
+    "awareness": "ግንዛቤ",
+    "logout": "ውጣ",
+    "dashboard": "ዳሽቦርድ"
+  },
+  "auth": {
+    "login": "ግባ",
+    "signup": "ይመዝገቡ",
+    "phone": "ስልክ ቁጥር",
+    "pin": "ባለ 6-አሃዝ የይለፍ ቃል",
+    "role": "የእርስዎ ሚና",
+    "selectRole": "ሚናዎን ይምረጡ"
+  },
+  "roles": {
+    "client": "ታካሚ / ተጠቃሚ",
+    "doctor": "ሐኪም / ክሊኒክ",
+    "agent": "ድርጅት / ተወካይ"
+  },
+  "dashboard": {
+    "greeting": "እንኳን ደህና መጡ፣ {name}",
+    "moodPrompt": "ዛሬ ምን ይሰማዎታል?",
+    "quickActions": "ፈጣን እርምጃዎች"
+  },
+  "wellness": {
+    "startChat": "ውይይት ጀምር",
+    "anonymous": "ማንነትን መደበቂያ",
+    "talkToPro": "ከባለሙያ ጋር ያውሩ",
+    "moodLog": "የስሜት መዝገብ",
+    "progress": "ሂደት"
+  },
+  "healthId": {
+    "yourQr": "የእርስዎ የጤና መታወቂያ",
+    "editRecord": "የህክምና መዝገብ ያስተካክሉ",
+    "emergencyContacts": "የድንገተኛ ጊዜ አድራሻዎች",
+    "addContact": "አድራሻ ያክሉ"
+  },
+  "awareness": {
+    "search": "ጽሑፎችን ይፈልጉ...",
+    "nearbyHospitals": "አቅራቢያ ያሉ ሆስፒታሎች",
+    "emergency": "የድንገተኛ አደጋ ቁጥሮች"
+  },
+  "doctor": {
+    "scanPatient": "የታካሚ መታወቂያ ይቃኙ",
+    "patientHistory": "የታካሚ ታሪክ",
+    "addDiagnosis": "ምርመራ ያክሉ",
+    "aiAssistant": "የAI ድጋፍ"
+  },
+  "common": {
+    "save": "አስቀምጥ",
+    "cancel": "ሰርዝ",
+    "delete": "አጥፋ",
+    "loading": "በመጫን ላይ...",
+    "error": "ስህተት ተከስቷል",
+    "success": "ተሳክቷል!"
+  },
+  "bloodTypes": {
+    "a+": "A+",
+    "a-": "A-",
+    "b+": "B+",
+    "b-": "B-",
+    "ab+": "AB+",
+    "ab-": "AB-",
+    "o+": "O+",
+    "o-": "O-"
+  },
+  "landing": {
+    "heroTitle": "ደህንነት የሚጀምረው በግንኙነት ነው",
+    "heroTagline": "የአእምሮ ደህንነት እና ጤና — በቋንቋዎ፣ ከጎንዎ።",
+    "statsTitle": "የምንፈታው ችግር",
+    "stat1": "1 የስነ-አእምሮ ሀኪም ለ1 ሚሊዮን ህዝብ",
+    "stat2": "አማካኝ የድንገተኛ ክፍል ጥበቃ፡ 4+ ሰዓታት",
+    "stat3": "80% ያለ ህክምና መዝገብ ይመጣሉ"
+  }
+}

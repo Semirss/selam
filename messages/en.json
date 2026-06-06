@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "home": "Home",
+    "wellness": "Wellness",
+    "healthId": "Health ID",
+    "awareness": "Awareness",
+    "logout": "Logout",
+    "dashboard": "Dashboard"
+  },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "phone": "Phone Number",
+    "pin": "6-Digit PIN",
+    "role": "I am a",
+    "selectRole": "Select your role"
+  },
+  "roles": {
+    "client": "Patient / Client",
+    "doctor": "Doctor / Clinic",
+    "agent": "NGO / Agent"
+  },
+  "dashboard": {
+    "greeting": "Welcome back, {name}",
+    "moodPrompt": "How are you feeling today?",
+    "quickActions": "Quick Actions"
+  },
+  "wellness": {
+    "startChat": "Start AI Chat",
+    "anonymous": "Anonymous Mode",
+    "talkToPro": "Talk to a Professional",
+    "moodLog": "Mood Log",
+    "progress": "Progress"
+  },
+  "healthId": {
+    "yourQr": "Your Health ID",
+    "editRecord": "Edit Medical Record",
+    "emergencyContacts": "Emergency Contacts",
+    "addContact": "Add Contact"
+  },
+  "awareness": {
+    "search": "Search articles...",
+    "nearbyHospitals": "Nearby Hospitals",
+    "emergency": "Emergency Numbers"
+  },
+  "doctor": {
+    "scanPatient": "Scan Patient ID",
+    "patientHistory": "Patient History",
+    "addDiagnosis": "Add Diagnosis",
+    "aiAssistant": "AI Diagnostic Support"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success!"
+  },
+  "bloodTypes": {
+    "a+": "A+",
+    "a-": "A-",
+    "b+": "B+",
+    "b-": "B-",
+    "ab+": "AB+",
+    "ab-": "AB-",
+    "o+": "O+",
+    "o-": "O-"
+  },
+  "landing": {
+    "heroTitle": "Wellbeing starts with connection",
+    "heroTagline": "Mental wellness and health network — in your language, at your side.",
+    "statsTitle": "The Problem We Solve",
+    "stat1": "1 psychiatrist per 1M people",
+    "stat2": "Avg ER wait: 4+ hours",
+    "stat3": "80% arrive with no medical record"
+  }
+}

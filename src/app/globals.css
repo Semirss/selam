@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #2C4A6E;
+  --teal: #1A9E7A;
+  --teal-light: #EAF4F1;
+  --teal-mid: #4E8B72;
+  --off-white: #F8F9FA;
+  --surface: #FFFFFF;
+  --dark: #1C1C2E;
+  --gray: #6B7280;
+  --gray-light: #F3F4F6;
+  --danger: #E53E3E;
+  --warning: #D97706;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 3px rgba(44, 74, 110, 0.08);
+  --shadow-md: 0 4px 16px rgba(44, 74, 110, 0.12);
+  --shadow-lg: 0 12px 40px rgba(44, 74, 110, 0.18);
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-teal: var(--teal);
+  --color-teal-light: var(--teal-light);
+  --color-teal-mid: var(--teal-mid);
+  --color-off-white: var(--off-white);
+  --color-surface: var(--surface);
+  --color-dark: var(--dark);
+  --color-gray: var(--gray);
+  --color-gray-light: var(--gray-light);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  --font-display: var(--font-playfair), serif;
+  --font-sans: var(--font-dm-sans), var(--font-noto-ethiopic), sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--off-white);
+    color: var(--dark);
+    font-family: var(--font-sans);
+  }
+}
+
+/* Premium Visual Details */
+.grain-bg {
+  position: relative;
+}
+
+.grain-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.4;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.teal-glow {
+  box-shadow: 0 0 24px rgba(26, 158, 122, 0.35);
+}
+
+.hover-lift {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}

@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "home": "Gadaa",
+    "wellness": "Nageenya",
+    "healthId": "Eenyummeessa Fayyaa",
+    "awareness": "Hubannoo",
+    "logout": "Ba'i",
+    "dashboard": "Daashboordii"
+  },
+  "auth": {
+    "login": "Seeni",
+    "signup": "Galmaa'i",
+    "phone": "Lakkoofsa Bilbilaa",
+    "pin": "PIN Digits-6",
+    "role": "Gahee Koo",
+    "selectRole": "Gahee kee filadhu"
+  },
+  "roles": {
+    "client": "Dhukkubsataa / Maamila",
+    "doctor": "Doktora / Kiliinika",
+    "agent": "Dhaabbata / Bakka bu'aa"
+  },
+  "dashboard": {
+    "greeting": "Baga nagaan deebitan, {name}",
+    "moodPrompt": "Har'a maaltu sitti dhaga'ama?",
+    "quickActions": "Tarkaanfiiwwan Saffisaa"
+  },
+  "wellness": {
+    "startChat": "Haasaa Jalqabi",
+    "anonymous": "Eenyummaa Dhoksaa",
+    "talkToPro": "Ogeessa waliin dubbadhu",
+    "moodLog": "Galmee Miiraa",
+    "progress": "Guddina"
+  },
+  "healthId": {
+    "yourQr": "Eenyummeessa Fayyaa Kee",
+    "editRecord": "Galmee Yaalaa Sirreessi",
+    "emergencyContacts": "Qunnamtii Balaa Tasaa",
+    "addContact": "Qunnamtii Ida'i"
+  },
+  "awareness": {
+    "search": "Barreeffamoota barbaadi...",
+    "nearbyHospitals": "Hospitaalota Dhihoo",
+    "emergency": "Lakkoofsota Balaa Tasaa"
+  },
+  "doctor": {
+    "scanPatient": "Eenyummeessa Dhukkubsataa Skaan Godhi",
+    "patientHistory": "Seenaa Dhukkubsataa",
+    "addDiagnosis": "Yaalii Ida'i",
+    "aiAssistant": "Gargaarsa AI"
+  },
+  "common": {
+    "save": "Olkaa'i",
+    "cancel": "Haqi",
+    "delete": "Balleessi",
+    "loading": "Fe'amaa jira...",
+    "error": "Dogoggorri uumameera",
+    "success": "Milkaa'eera!"
+  },
+  "bloodTypes": {
+    "a+": "A+",
+    "a-": "A-",
+    "b+": "B+",
+    "b-": "B-",
+    "ab+": "AB+",
+    "ab-": "AB-",
+    "o+": "O+",
+    "o-": "O-"
+  },
+  "landing": {
+    "heroTitle": "Nageenyi walitti dhufeenyaan jalqaba",
+    "heroTagline": "Fayyaa sammuu fi fayyaa — afaan keetiin, cinaa kee.",
+    "statsTitle": "Rakkoo nuti furru",
+    "stat1": "Ogeessa sammuu 1 uummata miiliyoona 1f",
+    "stat2": "Yeroo eeggannoo kutaa balaa tasaa giddugaleessaan: sa'aatii 4+",
+    "stat3": "80% galmee yaalaa malee dhufu"
+  }
+}

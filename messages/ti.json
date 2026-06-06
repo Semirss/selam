@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "home": "ዋና",
+    "wellness": "ድሕነት",
+    "healthId": "ናይ ጥዕና መንነት",
+    "awareness": "ግንዛበ",
+    "logout": "ውፃእ",
+    "dashboard": "ዳሽቦርድ"
+  },
+  "auth": {
+    "login": "እቶ",
+    "signup": "ተመዝገብ",
+    "phone": "ቁፅሪ ስልኪ",
+    "pin": "6-ኣሃዝ ፒን",
+    "role": "ግደይ",
+    "selectRole": "ግደኹም ምረፁ"
+  },
+  "roles": {
+    "client": "ሕሙም / ተጠቃሚ",
+    "doctor": "ሓኪም / ክሊኒክ",
+    "agent": "ትካል / ወኪል"
+  },
+  "dashboard": {
+    "greeting": "እንቋዕ ብደሓን መፁ፣ {name}",
+    "moodPrompt": "ሎሚ እንታይ ይስመዓኩም?",
+    "quickActions": "ቅልጡፍ ስጉምትታት"
+  },
+  "wellness": {
+    "startChat": "ዕላል ጀምር",
+    "anonymous": "መንነት ዝሓብእ",
+    "talkToPro": "ምስ ሞያተኛ ተዛረቡ",
+    "moodLog": "መዝገብ ስምዒት",
+    "progress": "መስርሕ"
+  },
+  "healthId": {
+    "yourQr": "ናይ ጥዕና መንነትኩም",
+    "editRecord": "ናይ ሕክምና መዝገብ ኣስተኻኽል",
+    "emergencyContacts": "ናይ ህፁፅ እዋን ኣድራሻታት",
+    "addContact": "ኣድራሻ ወስኽ"
+  },
+  "awareness": {
+    "search": "ፅሑፋት ድለዩ...",
+    "nearbyHospitals": "አብ ቀረባ ዘለዉ ሆስፒታላት",
+    "emergency": "ናይ ህፁፅ አደጋ ቁፅርታት"
+  },
+  "doctor": {
+    "scanPatient": "መንነት ሕሙም ይቃኙ",
+    "patientHistory": "ታሪክ ሕሙም",
+    "addDiagnosis": "ምርመራ ወስኽ",
+    "aiAssistant": "ናይ AI ደገፍ"
+  },
+  "common": {
+    "save": "ኣቀምጥ",
+    "cancel": "ሰርዝ",
+    "delete": "ኣጥፍእ",
+    "loading": "እናፀዓነ...",
+    "error": "ጌጋ ተፈጢሩ",
+    "success": "ተሳኺዑ!"
+  },
+  "bloodTypes": {
+    "a+": "A+",
+    "a-": "A-",
+    "b+": "B+",
+    "b-": "B-",
+    "ab+": "AB+",
+    "ab-": "AB-",
+    "o+": "O+",
+    "o-": "O-"
+  },
+  "landing": {
+    "heroTitle": "ድሕነት ብርክክብ ይጅምር",
+    "heroTagline": "ናይ ኣእምሮ ድሕነትን ጥዕናን — ብቋንቋኹም፣ ኣብ ጎድንኹም።",
+    "statsTitle": "እንፈትሖ ፀገም",
+    "stat1": "1 ናይ ስነ-ኣእምሮ ሓኪም ን1 ሚልዮን ህዝቢ",
+    "stat2": "ማእኸላይ ናይ ህፁፅ ክፍሊ ትፅቢት፡ 4+ ሰዓታት",
+    "stat3": "80% ብዘይ ናይ ሕክምና መዝገብ ይመፁ"
+  }
+}
