@@ -133,7 +133,7 @@ export default function LandingPage() {
               Mental wellness and health network — in your language, at your side. Built for Ethiopia and East Africa.
             </p>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 relative">
               <Link href={`/${locale}/auth/signup`}>
                 <Button size="lg" className="teal-glow gap-2">
                   Get Started Free <ArrowRight className="h-5 w-5" />
@@ -144,11 +144,45 @@ export default function LandingPage() {
                   Download App
                 </Button>
               </a>
-              <Link href={`/${locale}/about`}>
-                <Button size="lg" variant="ghost" className="text-white hover:bg-white/10 border border-white/20">
-                  Learn More
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                variant="ghost" 
+                className="text-white hover:bg-white/10 border border-white/20 gap-2"
+                onClick={() => {
+                  const dialog = document.getElementById('demo-video-modal') as HTMLDialogElement;
+                  dialog?.showModal();
+                }}
+              >
+                Watch Demo
+              </Button>
+
+              {/* Video Modal using native HTML dialog for simplicity and accessibility */}
+              <dialog 
+                id="demo-video-modal" 
+                className="bg-black/90 backdrop-blur-sm p-0 m-auto w-[90vw] max-w-5xl rounded-2xl overflow-hidden shadow-2xl backdrop:bg-black/80 backdrop:backdrop-blur-sm"
+                onClick={(e) => {
+                  const dialog = e.currentTarget;
+                  if (e.target === dialog) dialog.close();
+                }}
+              >
+                <div className="relative w-full aspect-video">
+                  <button 
+                    onClick={() => {
+                      const dialog = document.getElementById('demo-video-modal') as HTMLDialogElement;
+                      dialog?.close();
+                    }}
+                    className="absolute top-4 right-4 z-10 bg-black/50 text-white h-10 w-10 rounded-full flex items-center justify-center hover:bg-black/70 transition"
+                  >
+                    ✕
+                  </button>
+                  <video 
+                    src="/demo-video.mp4" 
+                    controls 
+                    autoPlay 
+                    className="w-full h-full object-contain bg-black"
+                  />
+                </div>
+              </dialog>
             </div>
 
             {/* Dot indicators for hero images */}

@@ -45,7 +45,7 @@ export default function DashboardPage() {
     { href: `/${locale}/dashboard/wellness`, icon: MessageCircle, label: 'Start AI Chat', color: 'bg-teal' },
     { href: `/${locale}/dashboard/health-id`, icon: CreditCard, label: 'Health ID', color: 'bg-navy' },
     { href: `/${locale}/dashboard/awareness`, icon: MapPin, label: 'Find Hospital', color: 'bg-purple-600' },
-    { href: `/${locale}/dashboard/health-id`, icon: Users, label: 'Contacts', color: 'bg-orange-500' },
+    { href: `/${locale}/dashboard/contacts`, icon: Users, label: 'Contacts', color: 'bg-orange-500' },
   ];
 
   return (

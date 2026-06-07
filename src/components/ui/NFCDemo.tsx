@@ -1,45 +1,74 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, useAnimation, useDragControls } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { Lock, Heart, Activity, Droplets, ShieldAlert, Phone as PhoneIcon, User, PlusCircle } from 'lucide-react';
 
 export function NFCDemo() {
   const [hasScanned, setHasScanned] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Animation controls
+  const patientPhoneControls = useAnimation();
   const doctorPhoneControls = useAnimation();
   const scanCircleControls = useAnimation();
 
-  const handleDrag = (event: any, info: any) => {
-    // If we drag it far enough to the right (towards the doctor's phone)
-    if (info.offset.x > 80 && !hasScanned) {
-      triggerScan();
-    }
-  };
+  useEffect(() => {
+    // Automated sequence
+    const runSequence = async () => {
+      // Wait a bit before starting
+      await new Promise(r => setTimeout(r, 2000));
 
-  const triggerScan = async () => {
-    if (hasScanned) return;
-    setHasScanned(true);
-    
-    // Ripple effect on doctor's phone
-    scanCircleControls.start({
-      scale: [1, 3],
-      opacity: [0.8, 0],
-      transition: { duration: 0.6, ease: "easeOut" }
-    });
+      while (true) {
+        // Reset state
+        setHasScanned(false);
+        patientPhoneControls.set({ x: 0, scale: 1, rotate: 0, zIndex: 20 });
+        doctorPhoneControls.set({ scale: 1 });
+        scanCircleControls.set({ opacity: 0, scale: 0 });
 
-    // Slight bump animation on the doctor's phone
-    await doctorPhoneControls.start({
-      scale: [1, 1.02, 1],
-      transition: { duration: 0.3 }
-    });
-  };
+        await new Promise(r => setTimeout(r, 1000));
 
-  const resetDemo = () => {
-    setHasScanned(false);
-  };
+        // 1. Patient phone moves right and slightly up to overlap doctor phone
+        await patientPhoneControls.start({
+          x: 140, // Move over the doctor phone
+          y: -20,
+          scale: 1.05,
+          rotate: 5,
+          transition: { duration: 0.8, ease: "easeInOut" }
+        });
+
+        // 2. Trigger scan ripple
+        scanCircleControls.start({
+          scale: [1, 3],
+          opacity: [0.8, 0],
+          transition: { duration: 0.6, ease: "easeOut" }
+        });
+
+        // 3. Doctor phone bump
+        doctorPhoneControls.start({
+          scale: [1, 1.03, 1],
+          transition: { duration: 0.3 }
+        });
+
+        // Show data on doctor phone
+        setHasScanned(true);
+
+        // Wait a moment so they "hold" the phones together
+        await new Promise(r => setTimeout(r, 500));
+
+        // 4. Patient phone slides back
+        await patientPhoneControls.start({
+          x: 0,
+          y: 0,
+          scale: 1,
+          rotate: 0,
+          transition: { duration: 0.8, ease: "easeInOut", delay: 0.2 }
+        });
+
+        // Wait a few seconds to let user read the data before restarting loop
+        await new Promise(r => setTimeout(r, 6000));
+      }
+    };
+
+    runSequence();
+  }, [patientPhoneControls, doctorPhoneControls, scanCircleControls]);
 
   // Live clock for lock screen
   const [time, setTime] = useState("10:42");
@@ -51,17 +80,12 @@ export function NFCDemo() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-3xl mx-auto h-[500px] flex items-center justify-center gap-8 md:gap-20 p-4" ref={containerRef}>
+    <div className="relative w-full max-w-3xl mx-auto h-[500px] flex items-center justify-center gap-8 md:gap-20 p-4 overflow-hidden">
       
       {/* Patient Phone (Locked Screen) */}
       <motion.div
-        drag="x"
-        dragConstraints={containerRef}
-        dragElastic={0.2}
-        onDrag={handleDrag}
-        dragSnapToOrigin={true}
-        whileDrag={{ scale: 1.05, rotate: 2, cursor: "grabbing" }}
-        className="relative z-20 w-[220px] h-[450px] bg-black rounded-[2.5rem] border-[6px] border-gray-800 shadow-2xl overflow-hidden cursor-grab flex flex-col items-center select-none"
+        animate={patientPhoneControls}
+        className="relative z-20 w-[220px] h-[450px] bg-black rounded-[2.5rem] border-[6px] border-gray-800 shadow-2xl overflow-hidden flex flex-col items-center select-none"
       >
         {/* Notch */}
         <div className="absolute top-0 w-32 h-6 bg-gray-800 rounded-b-2xl z-30"></div>
@@ -93,7 +117,7 @@ export function NFCDemo() {
               <PhoneIcon className="w-5 h-5 text-teal-300" />
             </div>
             <p className="text-white text-sm font-medium mb-1">Health ID Active</p>
-            <p className="text-white/60 text-[10px]">Drag phone near doctor's device to share record</p>
+            <p className="text-white/60 text-[10px]">Sharing medical record...</p>
           </div>
         </div>
 
@@ -127,92 +151,100 @@ export function NFCDemo() {
         <motion.div 
           animate={scanCircleControls}
           initial={{ opacity: 0, scale: 0 }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-teal-400 rounded-full pointer-events-none z-20"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-teal-400 rounded-full pointer-events-none z-20"
         />
 
         {/* Doctor App UI */}
         <div className="flex-1 bg-gray-50 flex flex-col pt-10">
-          {!hasScanned ? (
-            // Waiting State
-            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+          <AnimatePresence mode="wait">
+            {!hasScanned ? (
+              // Waiting State
               <motion.div 
-                animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-                className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mb-4"
+                key="waiting"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 flex flex-col items-center justify-center p-6 text-center absolute inset-0 pt-10"
               >
-                <Activity className="w-8 h-8 text-teal-600" />
+                <motion.div 
+                  animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                  className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mb-4"
+                >
+                  <Activity className="w-8 h-8 text-teal-600" />
+                </motion.div>
+                <h3 className="text-gray-800 font-bold text-lg mb-2">Ready to Scan</h3>
+                <p className="text-gray-500 text-sm">Receiving patient data via NFC...</p>
               </motion.div>
-              <h3 className="text-gray-800 font-bold text-lg mb-2">Ready to Scan</h3>
-              <p className="text-gray-500 text-sm">Tap patient's device here to instantly receive medical records.</p>
-            </div>
-          ) : (
-            // Scanned Data State
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex-1 flex flex-col bg-white"
-            >
-              {/* Header */}
-              <div className="bg-teal-600 p-4 pb-6 text-white rounded-b-3xl shadow-sm relative">
-                <button onClick={resetDemo} className="absolute top-2 right-4 text-white/70 text-xs hover:text-white">Reset</button>
-                <div className="flex items-center gap-3 mt-2">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="font-bold text-lg leading-tight">Abebe Kebede</h2>
-                    <p className="text-teal-100 text-xs flex items-center gap-1"><ShieldAlert className="w-3 h-3"/> Verified Identity</p>
+            ) : (
+              // Scanned Data State
+              <motion.div 
+                key="scanned"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex-1 flex flex-col bg-white h-full relative z-10"
+              >
+                {/* Header */}
+                <div className="bg-teal-600 p-4 pb-6 text-white rounded-b-3xl shadow-sm relative">
+                  <div className="flex items-center gap-3 mt-2">
+                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                      <User className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="font-bold text-lg leading-tight">Abebe Kebede</h2>
+                      <p className="text-teal-100 text-xs flex items-center gap-1"><ShieldAlert className="w-3 h-3"/> Verified Identity</p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Data Cards */}
-              <div className="p-4 flex-1 overflow-y-auto space-y-3 -mt-4 relative z-10">
-                <motion.div 
-                  initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
-                  className="bg-white rounded-xl p-3 shadow-sm border border-gray-100 flex gap-4"
-                >
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-1 flex items-center gap-1"><Droplets className="w-3 h-3 text-red-500"/> Blood Type</p>
-                    <p className="font-bold text-lg text-gray-800">O+</p>
-                  </div>
-                  <div className="w-px bg-gray-100"></div>
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-1 flex items-center gap-1"><Heart className="w-3 h-3 text-rose-500"/> Heart Rate</p>
-                    <p className="font-bold text-lg text-gray-800">72 <span className="text-xs font-normal">bpm</span></p>
-                  </div>
-                </motion.div>
+                {/* Data Cards */}
+                <div className="p-4 flex-1 overflow-y-auto space-y-3 -mt-4 relative z-10">
+                  <motion.div 
+                    initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
+                    className="bg-white rounded-xl p-3 shadow-sm border border-gray-100 flex gap-4"
+                  >
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500 mb-1 flex items-center gap-1"><Droplets className="w-3 h-3 text-red-500"/> Blood Type</p>
+                      <p className="font-bold text-lg text-gray-800">O+</p>
+                    </div>
+                    <div className="w-px bg-gray-100"></div>
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500 mb-1 flex items-center gap-1"><Heart className="w-3 h-3 text-rose-500"/> Heart Rate</p>
+                      <p className="font-bold text-lg text-gray-800">72 <span className="text-xs font-normal">bpm</span></p>
+                    </div>
+                  </motion.div>
 
-                <motion.div 
-                  initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
-                  className="bg-orange-50 rounded-xl p-3 shadow-sm border border-orange-100"
-                >
-                  <p className="text-xs text-orange-600 font-bold mb-1 uppercase tracking-wider">Allergies</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    <span className="bg-orange-200 text-orange-800 text-[10px] px-2 py-1 rounded-md font-medium">Penicillin</span>
-                    <span className="bg-orange-200 text-orange-800 text-[10px] px-2 py-1 rounded-md font-medium">Peanuts</span>
-                  </div>
-                </motion.div>
+                  <motion.div 
+                    initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
+                    className="bg-orange-50 rounded-xl p-3 shadow-sm border border-orange-100"
+                  >
+                    <p className="text-xs text-orange-600 font-bold mb-1 uppercase tracking-wider">Allergies</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <span className="bg-orange-200 text-orange-800 text-[10px] px-2 py-1 rounded-md font-medium">Penicillin</span>
+                      <span className="bg-orange-200 text-orange-800 text-[10px] px-2 py-1 rounded-md font-medium">Peanuts</span>
+                    </div>
+                  </motion.div>
 
-                <motion.div 
-                  initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
-                  className="bg-blue-50 rounded-xl p-3 shadow-sm border border-blue-100"
-                >
-                  <p className="text-xs text-blue-600 font-bold mb-1 uppercase tracking-wider">Active Conditions</p>
-                  <p className="text-sm text-gray-800 font-medium">Hypertension</p>
-                  <p className="text-xs text-gray-500 mt-1">Diagnosed 2023 • Managed</p>
-                </motion.div>
-                
-                <motion.button 
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-                  className="w-full mt-2 bg-teal-50 text-teal-700 rounded-xl p-3 flex items-center justify-center gap-2 text-sm font-semibold hover:bg-teal-100"
-                >
-                  <PlusCircle className="w-4 h-4"/>
-                  Add Clinical Note
-                </motion.button>
-              </div>
-            </motion.div>
-          )}
+                  <motion.div 
+                    initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
+                    className="bg-blue-50 rounded-xl p-3 shadow-sm border border-blue-100"
+                  >
+                    <p className="text-xs text-blue-600 font-bold mb-1 uppercase tracking-wider">Active Conditions</p>
+                    <p className="text-sm text-gray-800 font-medium">Hypertension</p>
+                    <p className="text-xs text-gray-500 mt-1">Diagnosed 2023 • Managed</p>
+                  </motion.div>
+                  
+                  <motion.button 
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+                    className="w-full mt-2 bg-teal-50 text-teal-700 rounded-xl p-3 flex items-center justify-center gap-2 text-sm font-semibold hover:bg-teal-100"
+                  >
+                    <PlusCircle className="w-4 h-4"/>
+                    Add Clinical Note
+                  </motion.button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
     </div>
