@@ -82,22 +82,40 @@ export function AwarenessFeed({ locale }: AwarenessFeedProps) {
       <div className="space-y-4">
         {loading && posts.length === 0
           ? Array.from({ length: 3 }).map((_, i) => (
-              <Card key={i} className="p-5 space-y-3">
-                <Skeleton className="h-5 w-3/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
+              <Card key={i} className="overflow-hidden p-0">
+                <Skeleton className="h-40 w-full rounded-none" />
+                <div className="p-5 space-y-3">
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                </div>
               </Card>
             ))
-          : filtered.map(post => (
-              <Card key={post.id} hoverLift className="p-5">
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <h3 className="font-semibold text-navy leading-snug">{getTitle(post)}</h3>
-                  {post.category && <Badge variant="outline">{post.category}</Badge>}
-                </div>
-                <p className="text-sm text-gray line-clamp-3">{getBody(post)}</p>
-                <p className="text-xs text-gray mt-3">{formatDate(post.published_at)}</p>
-              </Card>
-            ))}
+          : filtered.map(post => {
+              const image = (post as any).image as string | undefined;
+              return (
+                <Card key={post.id} hoverLift className="overflow-hidden p-0">
+                  {image && (
+                    <div className="h-44 w-full overflow-hidden bg-gray-100">
+                      <img
+                        src={image}
+                        alt={getTitle(post)}
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                    </div>
+                  )}
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-semibold text-navy leading-snug">{getTitle(post)}</h3>
+                      {post.category && <Badge variant="outline">{post.category}</Badge>}
+                    </div>
+                    <p className="text-sm text-gray line-clamp-3">{getBody(post)}</p>
+                    <p className="text-xs text-gray mt-3">{formatDate(post.published_at)}</p>
+                  </div>
+                </Card>
+              );
+            })}
       </div>
 
       {hasMore && !loading && (

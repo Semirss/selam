@@ -9,6 +9,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ArrowRight, Brain, QrCode, Shield, Globe, ChevronRight } from 'lucide-react';
+import { NFCDemo } from '@/components/ui/NFCDemo';
 
 // Animated counter hook
 function useCounter(target: number, duration = 2000) {
@@ -270,50 +271,22 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Feature: Health Network */}
-      <section className="py-20 bg-white">
+      {/* Feature: Health Network (NFC) */}
+      <section className="py-20 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col md:flex-row-reverse items-center gap-16">
-            <div className="flex-1">
-              <span className="text-teal font-semibold text-sm tracking-wide uppercase">Pillar 2</span>
-              <h2 className="font-display text-4xl font-bold text-navy mt-2 mb-4 leading-tight">
-                Your health record, <br />always with you
-              </h2>
-              <p className="text-gray leading-relaxed mb-6">
-                One QR code carries your blood type, conditions, medications, and emergency contacts.
-                Doctors can scan it instantly — no paperwork, no delays.
-              </p>
-              <ul className="space-y-3">
-                {['Unique QR Health ID', 'Emergency contact blood matching', 'Doctor scan history', 'Hospital finder map'].map(f => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-dark">
-                    <span className="h-5 w-5 rounded-full bg-teal-light flex items-center justify-center shrink-0">
-                      <ChevronRight className="h-3 w-3 text-teal" />
-                    </span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex-1 flex justify-center">
-              <div className="w-full max-w-xs">
-                {/* QR workflow visual */}
-                <div className="flex flex-col items-center gap-4">
-                  {[
-                    { icon: QrCode, label: 'Patient shows QR', color: 'bg-teal-light', text: 'text-teal' },
-                    { icon: Shield, label: 'Doctor scans ID', color: 'bg-navy/10', text: 'text-navy' },
-                    { icon: Brain, label: 'AI assists diagnosis', color: 'bg-purple-50', text: 'text-purple-600' },
-                  ].map((step, i) => (
-                    <div key={i} className="flex flex-col items-center">
-                      <div className={`h-16 w-16 rounded-2xl ${step.color} flex items-center justify-center shadow-sm`}>
-                        <step.icon className={`h-8 w-8 ${step.text}`} />
-                      </div>
-                      <p className="text-sm font-medium text-navy mt-2">{step.label}</p>
-                      {i < 2 && <div className="h-6 w-px bg-gray-light my-1" />}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-teal font-semibold text-sm tracking-wide uppercase">Pillar 2</span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-navy mt-2 mb-4 leading-tight">
+              Instant medical history <br />with a simple tap
+            </h2>
+            <p className="text-gray text-lg leading-relaxed mb-6">
+              Whether through our dynamic QR code or a quick NFC tap from your locked screen, your medical history is instantly and securely shared with your doctor. No paperwork, no delays.
+            </p>
+          </div>
+          
+          {/* Interactive NFC Demo */}
+          <div className="w-full flex justify-center">
+            <NFCDemo />
           </div>
         </div>
       </section>

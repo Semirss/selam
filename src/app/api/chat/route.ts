@@ -46,8 +46,15 @@ export async function POST(req: NextRequest) {
     return new Response(stream, {
       headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-cache' }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Chat error:', error);
+    // Handle Gemini API quota / rate limit gracefully
+    if (error?.status === 429) {
+      return NextResponse.json(
+        { error: 'The AI is taking a short break due to high demand. Please try again in a moment.' },
+        { status: 429 }
+      );
+    }
     return NextResponse.json({ error: 'Failed to process chat' }, { status: 500 });
   }
 }

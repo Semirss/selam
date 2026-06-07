@@ -17,8 +17,8 @@ export function MoodChart({ moods }: MoodChartProps) {
     }));
 
   return (
-    <div className="w-full h-48">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="w-full" style={{ minHeight: 192, height: 192 }}>
+      <ResponsiveContainer width="100%" height={192}>
         <LineChart data={data} margin={{ top: 5, right: 16, left: -20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
           <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#6B7280' }} />

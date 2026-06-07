@@ -1,13 +1,13 @@
 "use client";
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Home, Heart, CreditCard, Newspaper, Settings,
-  Stethoscope, Users, BarChart, ChevronLeft, ChevronRight
+  Home, Heart, CreditCard, Newspaper, MapPin,
+  Stethoscope, Users, BarChart, ChevronLeft, ChevronRight, LogOut
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -18,13 +18,20 @@ interface SidebarProps {
 export function Sidebar({ role }: SidebarProps) {
   const locale = useLocale();
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+
+  const handleSignOut = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push(`/${locale}/auth/login`);
+  };
 
   const clientLinks = [
     { href: `/${locale}/dashboard`, icon: Home, label: 'Home' },
     { href: `/${locale}/dashboard/wellness`, icon: Heart, label: 'Wellness' },
     { href: `/${locale}/dashboard/health-id`, icon: CreditCard, label: 'Health ID' },
     { href: `/${locale}/dashboard/awareness`, icon: Newspaper, label: 'Awareness' },
+    { href: `/${locale}/dashboard/hospitals`, icon: MapPin, label: 'Hospitals' },
   ];
 
   const doctorLinks = [
@@ -79,6 +86,18 @@ export function Sidebar({ role }: SidebarProps) {
           );
         })}
       </nav>
+
+      {/* Sign Out */}
+      <div className="p-3 border-t border-gray-light">
+        <button
+          onClick={handleSignOut}
+          title="Sign Out"
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-sm font-medium text-gray hover:bg-red-50 hover:text-danger transition-colors"
+        >
+          <LogOut className="h-5 w-5 shrink-0" />
+          {!collapsed && <span>Sign Out</span>}
+        </button>
+      </div>
     </motion.aside>
   );
 }

@@ -32,10 +32,12 @@ export async function POST(req: Request) {
 
     const pin_hash = await bcrypt.hash(pin, 12);
 
-    // Insert profile
+    // Insert profile — dummy email/password satisfy DB NOT NULL constraints;
+    // real auth uses phone + pin_hash, no Supabase Auth involved.
+    const email = `${phone}@selam.internal`;
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .insert({ phone, pin_hash, full_name, role, language, blood_type })
+      .insert({ phone, pin_hash, full_name, role, language, blood_type, email, password: pin_hash })
       .select()
       .single();
 
