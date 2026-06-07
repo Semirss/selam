@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ArrowRight, Brain, QrCode, Shield, Globe, ChevronRight } from 'lucide-react';
 import { NFCDemo } from '@/components/ui/NFCDemo';
+import { VideoIntroModal } from '@/components/ui/VideoIntroModal';
 
 // Animated counter hook
 function useCounter(target: number, duration = 2000) {
@@ -31,8 +32,8 @@ function useCounter(target: number, duration = 2000) {
 }
 
 const HERO_IMAGES = [
-  'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1920&q=80', // yoga/wellness outdoors
-  'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1920&q=80', // fitness/health
+  '/Mental_health_awareness_-_Main.jpg', 
+  '/Health_Internet_header.jpg', // fitness/health
   'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1920&q=80', // medical/wellness
 ];
 
@@ -91,10 +92,11 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <VideoIntroModal />
       <Navbar />
 
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-black grain-bg">
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-black">
         {/* Rotating background images */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -196,32 +198,6 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-
-          {/* Right: feature cards stack */}
-          <div className="hidden md:flex flex-col gap-4 flex-1 max-w-xs">
-            {[
-              { icon: Brain, title: 'AI Wellness', desc: 'Private, multilingual support 24/7' },
-              { icon: QrCode, title: 'Health ID', desc: 'Your medical record in a QR scan' },
-              { icon: Shield, title: 'Emergency Ready', desc: 'Blood type, contacts, history — instant' },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + i * 0.15 }}
-              >
-                <Card className="p-4 bg-white/10 backdrop-blur border-white/10 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-teal/20 flex items-center justify-center shrink-0">
-                    <item.icon className="h-5 w-5 text-teal" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white text-sm">{item.title}</p>
-                    <p className="text-white/60 text-xs">{item.desc}</p>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -322,6 +298,109 @@ export default function LandingPage() {
           <div className="w-full flex justify-center">
             <NFCDemo />
           </div>
+        </div>
+      </section>
+
+      {/* ── Video Showcase ── */}
+      <section
+        id="video-showcase"
+        className="relative py-28 overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #0d0d1a 0%, #0a1628 55%, #0d1a2e 100%)' }}
+      >
+        {/* Background mesh */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(26,158,122,0.07) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(44,74,110,0.1) 0%, transparent 50%)',
+        }} />
+        {/* Subtle grid */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }} />
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+
+          {/* Section header */}
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.75 }}
+            className="text-center max-w-2xl mx-auto mb-16"
+          >
+            {/* Badge */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <motion.span
+                animate={{ opacity: [1, 0.4, 1] }}
+                transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+                className="h-2 w-2 rounded-full"
+                style={{ background: '#1A9E7A', boxShadow: '0 0 8px #1A9E7A' }}
+              />
+              <span
+                className="px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase"
+                style={{
+                  background: 'rgba(26,158,122,0.1)',
+                  border: '1px solid rgba(26,158,122,0.28)',
+                  color: '#1A9E7A',
+                }}
+              >
+                Video Showcase
+              </span>
+            </div>
+
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
+              See Selam{' '}
+              <span style={{
+                background: 'linear-gradient(90deg, #1A9E7A, #4ECDC4)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>in action</span>
+            </h2>
+            <p className="text-white/45 text-lg leading-relaxed">
+              Watch how Selam bridges the gap between patients and quality care — delivering AI wellness, instant health ID, and emergency-ready records across East Africa.
+            </p>
+          </motion.div>
+
+          {/* Video player card */}
+          <motion.div
+            initial={{ opacity: 0, y: 44, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.85, delay: 0.12 }}
+            className="relative max-w-5xl mx-auto"
+          >
+            {/* Layered ambient glows */}
+            <div className="absolute -inset-8 rounded-[2rem] pointer-events-none" style={{
+              background: 'radial-gradient(ellipse at 50% 50%, rgba(26,158,122,0.22) 0%, transparent 65%)',
+              filter: 'blur(32px)',
+            }} />
+            <div className="absolute -inset-4 rounded-[2rem] pointer-events-none" style={{
+              background: 'radial-gradient(ellipse at 50% 100%, rgba(44,74,110,0.25) 0%, transparent 70%)',
+              filter: 'blur(20px)',
+            }} />
+
+            {/* Outer ring */}
+            <div className="absolute -inset-[1px] rounded-2xl pointer-events-none" style={{
+              background: 'linear-gradient(135deg, rgba(26,158,122,0.4) 0%, rgba(255,255,255,0.04) 50%, rgba(26,158,122,0.15) 100%)',
+            }} />
+
+            {/* Card */}
+            <div
+              className="relative rounded-2xl overflow-hidden"
+              style={{
+                boxShadow: '0 0 0 1px rgba(26,158,122,0.2), 0 0 80px rgba(26,158,122,0.18), 0 40px 80px rgba(0,0,0,0.7)',
+              }}
+            >
+              <video
+                src="/showcase-video.mp4"
+                controls
+                playsInline
+                className="w-full block"
+                style={{ aspectRatio: '16/9', background: '#000' }}
+              />
+            </div>
+
+
+          </motion.div>
         </div>
       </section>
 

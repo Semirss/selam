@@ -73,6 +73,7 @@ export function Navbar({ user }: NavbarProps) {
         <div className="hidden md:flex items-center gap-6">
           {!user && (
             <>
+              <Link href={`/${locale}/`} className="text-sm text-gray hover:text-navy transition-colors">Home</Link>
               <Link href={`/${locale}/pricing`} className="text-sm text-gray hover:text-navy transition-colors">Pricing</Link>
               <Link href={`/${locale}/about`} className="text-sm text-gray hover:text-navy transition-colors">About</Link>
             </>
