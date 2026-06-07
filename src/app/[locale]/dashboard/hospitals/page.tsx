@@ -72,13 +72,10 @@ export default function HospitalsPage() {
               </div>
             </div>
 
-            {/* Map — full width, constrained height */}
-            <div
-              className="w-full rounded-2xl overflow-hidden border border-gray-light shadow-md bg-white"
-              style={{ height: 420 }}
-            >
+            {/* Map — full width, explicit height owned by HospitalMap itself */}
+            <div className="w-full rounded-2xl overflow-hidden border border-gray-light shadow-md bg-white">
               {loading
-                ? <Skeleton className="w-full h-full rounded-none" />
+                ? <Skeleton className="w-full rounded-none" style={{ height: '420px' } as any} />
                 : <HospitalMap hospitals={hospitals} userPos={userPos} />
               }
             </div>

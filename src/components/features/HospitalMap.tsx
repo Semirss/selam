@@ -1,7 +1,6 @@
 "use client";
 
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Hospital } from '@/types';
 import { Skeleton } from '@/components/ui/Skeleton';
 
@@ -13,9 +12,20 @@ interface HospitalMapProps {
 function HospitalMapInner({ hospitals, userPos: userPosProp }: HospitalMapProps) {
   const [mounted, setMounted] = useState(false);
   const [userPos, setUserPos] = useState<[number, number]>(userPosProp || [9.03, 38.74]);
+  const mapRef = useRef<any>(null);
 
   useEffect(() => {
+    // Import Leaflet CSS dynamically — this is the critical missing piece
+    if (!document.getElementById('leaflet-css')) {
+      const link = document.createElement('link');
+      link.id = 'leaflet-css';
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+
     setMounted(true);
+
     if (userPosProp) {
       setUserPos(userPosProp);
     } else {
@@ -26,22 +36,41 @@ function HospitalMapInner({ hospitals, userPos: userPosProp }: HospitalMapProps)
     }
   }, [userPosProp]);
 
+  // When userPos or hospitals change, invalidate the map size so Leaflet
+  // recalculates its container bounds
+  useEffect(() => {
+    if (mapRef.current) {
+      setTimeout(() => {
+        mapRef.current?.invalidateSize();
+      }, 100);
+    }
+  }, [userPos, hospitals]);
+
   if (!mounted) return <Skeleton className="w-full h-full rounded-none" />;
 
-  const { MapContainer, TileLayer, Marker, Popup, Circle } = require('react-leaflet');
+  const { MapContainer, TileLayer, Marker, Popup, Circle, useMap } = require('react-leaflet');
   const L = require('leaflet');
 
   // Fix default icon path issue in Next.js
   delete (L.Icon.Default.prototype as any)._getIconUrl;
   L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
   });
 
-  const tealIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  const hospitalIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
+
+  const userIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -49,28 +78,35 @@ function HospitalMapInner({ hospitals, userPos: userPosProp }: HospitalMapProps)
   });
 
   return (
-    // Fill the parent container completely — parent sets the height
     <MapContainer
       center={userPos}
-      zoom={14}
-      style={{ height: '100%', width: '100%' }}
+      zoom={13}
+      // Use explicit pixel height — Leaflet REQUIRES a computed pixel height to render
+      style={{ height: '420px', width: '100%' }}
       scrollWheelZoom={true}
+      ref={mapRef}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {/* User position indicator */}
+      {/* User location */}
+      <Marker position={userPos} icon={userIcon}>
+        <Popup>
+          <p style={{ fontWeight: 700, fontSize: 13 }}>📍 Your Location</p>
+        </Popup>
+      </Marker>
       <Circle
         center={userPos}
-        radius={300}
-        pathOptions={{ color: '#1A9E7A', fillColor: '#1A9E7A', fillOpacity: 0.15, weight: 2 }}
+        radius={500}
+        pathOptions={{ color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.1, weight: 2 }}
       />
+      {/* Hospital markers */}
       {hospitals.map(h => (
-        <Marker key={h.id} position={[h.lat, h.lng]} icon={tealIcon}>
+        <Marker key={h.id} position={[h.lat, h.lng]} icon={hospitalIcon}>
           <Popup>
-            <div style={{ minWidth: 140 }}>
-              <p style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>{h.name}</p>
+            <div style={{ minWidth: 160 }}>
+              <p style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>🏥 {h.name}</p>
               {h.type && <p style={{ fontSize: 11, color: '#6B7280', marginBottom: 4 }}>{h.type}</p>}
               {h.phone && (
                 <a
@@ -88,7 +124,8 @@ function HospitalMapInner({ hospitals, userPos: userPosProp }: HospitalMapProps)
   );
 }
 
+import dynamic from 'next/dynamic';
 export const HospitalMap = dynamic(() => Promise.resolve(HospitalMapInner), {
   ssr: false,
-  loading: () => <Skeleton className="w-full h-full rounded-none" />,
+  loading: () => <Skeleton className="w-full rounded-2xl" style={{ height: '420px' } as any} />,
 });

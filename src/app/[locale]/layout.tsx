@@ -10,17 +10,20 @@ import "../globals.css";
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+  preload: false,
 });
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
+  preload: false,
 });
 
 const notoSansEthiopic = Noto_Sans_Ethiopic({
   variable: "--font-noto-ethiopic",
   subsets: ["ethiopic"],
   weight: ["400", "600", "700"],
+  preload: false,
 });
 
 export const metadata: Metadata = {

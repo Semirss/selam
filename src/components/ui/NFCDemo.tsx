@@ -11,19 +11,23 @@ export function NFCDemo() {
   const scanCircleControls = useAnimation();
 
   useEffect(() => {
+    let isMounted = true;
+
     // Automated sequence
     const runSequence = async () => {
       // Wait a bit before starting
       await new Promise(r => setTimeout(r, 2000));
 
-      while (true) {
+      while (isMounted) {
         // Reset state
         setHasScanned(false);
+        if (!isMounted) break;
         patientPhoneControls.set({ x: 0, scale: 1, rotate: 0, zIndex: 20 });
         doctorPhoneControls.set({ scale: 1 });
         scanCircleControls.set({ opacity: 0, scale: 0 });
 
         await new Promise(r => setTimeout(r, 1000));
+        if (!isMounted) break;
 
         // 1. Patient phone moves right and slightly up to overlap doctor phone
         await patientPhoneControls.start({
@@ -33,6 +37,7 @@ export function NFCDemo() {
           rotate: 5,
           transition: { duration: 0.8, ease: "easeInOut" }
         });
+        if (!isMounted) break;
 
         // 2. Trigger scan ripple
         scanCircleControls.start({
@@ -48,10 +53,12 @@ export function NFCDemo() {
         });
 
         // Show data on doctor phone
+        if (!isMounted) break;
         setHasScanned(true);
 
         // Wait a moment so they "hold" the phones together
         await new Promise(r => setTimeout(r, 500));
+        if (!isMounted) break;
 
         // 4. Patient phone slides back
         await patientPhoneControls.start({
@@ -68,6 +75,13 @@ export function NFCDemo() {
     };
 
     runSequence();
+
+    return () => {
+      isMounted = false;
+      patientPhoneControls.stop();
+      doctorPhoneControls.stop();
+      scanCircleControls.stop();
+    };
   }, [patientPhoneControls, doctorPhoneControls, scanCircleControls]);
 
   // Live clock for lock screen
@@ -80,7 +94,20 @@ export function NFCDemo() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-3xl mx-auto h-[500px] flex items-center justify-center gap-8 md:gap-20 p-4 overflow-hidden">
+    <div className="relative w-full mx-auto flex justify-center p-4 overflow-hidden min-h-[280px] sm:min-h-[380px] md:min-h-[520px]">
+      {/* Scale wrapper: shrinks both phones together on mobile */}
+      <div
+        className="relative flex items-center justify-center gap-6 md:gap-20"
+        style={{ transform: 'scale(var(--phone-scale, 1))', transformOrigin: 'center center' }}
+      >
+        <style>{`
+          @media (max-width: 480px) { :root { --phone-scale: 0.52; } }
+          @media (min-width: 481px) and (max-width: 767px) { :root { --phone-scale: 0.70; } }
+          @media (min-width: 768px) { :root { --phone-scale: 1; } }
+        `}</style>
+
+        {/* Tall spacer so the container doesn't collapse when scaled */}
+        <div className="absolute inset-0 pointer-events-none" style={{ minHeight: '500px' }} />
       
       {/* Patient Phone (Locked Screen) */}
       <motion.div
@@ -153,6 +180,8 @@ export function NFCDemo() {
           initial={{ opacity: 0, scale: 0 }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-teal-400 rounded-full pointer-events-none z-20"
         />
+
+
 
         {/* Doctor App UI */}
         <div className="flex-1 bg-gray-50 flex flex-col pt-10">
@@ -247,6 +276,7 @@ export function NFCDemo() {
           </AnimatePresence>
         </div>
       </motion.div>
+      </div>{/* end scale wrapper */}
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -12,7 +12,10 @@ import { MoodLogger } from '@/components/features/MoodLogger';
 import { MoodChart } from '@/components/features/MoodChart';
 import { Button } from '@/components/ui/Button';
 import { ToastProvider } from '@/components/ui/Toast';
-import { Heart, CreditCard, MapPin, Users, MessageCircle } from 'lucide-react';
+import { Heart, CreditCard, MapPin, Newspaper, Users, MessageCircle, Menu, X, Home } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 import type { MoodLog, AwarenessPost } from '@/types';
 
 export default function DashboardPage() {
@@ -41,11 +44,28 @@ export default function DashboardPage() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push(`/${locale}/auth/login`);
+  };
+
   const quickActions = [
-    { href: `/${locale}/dashboard/wellness`, icon: MessageCircle, label: 'Start AI Chat', color: 'bg-teal' },
-    { href: `/${locale}/dashboard/health-id`, icon: CreditCard, label: 'Health ID', color: 'bg-navy' },
-    { href: `/${locale}/dashboard/awareness`, icon: MapPin, label: 'Find Hospital', color: 'bg-purple-600' },
-    { href: `/${locale}/dashboard/contacts`, icon: Users, label: 'Contacts', color: 'bg-orange-500' },
+    { href: `/${locale}/dashboard/wellness`, icon: MessageCircle, label: 'AI Wellness Chat', color: 'bg-teal' },
+    { href: `/${locale}/dashboard/health-id`, icon: CreditCard, label: 'My Health ID', color: 'bg-navy' },
+    { href: `/${locale}/dashboard/awareness`, icon: Newspaper, label: 'Awareness Feed', color: 'bg-purple-600' },
+    { href: `/${locale}/dashboard/hospitals`, icon: MapPin, label: 'Find Hospitals', color: 'bg-orange-500' },
+  ];
+
+  const navLinks = [
+    { href: `/${locale}/dashboard`, icon: Home, label: 'Home' },
+    { href: `/${locale}/dashboard/wellness`, icon: Heart, label: 'Wellness' },
+    { href: `/${locale}/dashboard/health-id`, icon: CreditCard, label: 'Health ID' },
+    { href: `/${locale}/dashboard/awareness`, icon: Newspaper, label: 'Awareness' },
+    { href: `/${locale}/dashboard/hospitals`, icon: MapPin, label: 'Hospitals' },
   ];
 
   return (
@@ -53,7 +73,73 @@ export default function DashboardPage() {
       <div className="flex h-screen bg-off-white overflow-hidden">
         <Sidebar role="client" />
 
-        <main className="flex-1 overflow-y-auto p-6">
+        {/* Mobile Header */}
+        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-light px-4 h-14 flex items-center justify-between shadow-sm">
+          <span className="font-display font-bold text-navy text-lg">Selam</span>
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="p-2 rounded-lg hover:bg-gray-light transition-colors"
+          >
+            <Menu className="h-5 w-5 text-navy" />
+          </button>
+        </div>
+
+        {/* Mobile Drawer Overlay */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setMobileOpen(false)}
+                className="md:hidden fixed inset-0 bg-black/50 z-40"
+              />
+              <motion.div
+                initial={{ x: '-100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '-100%' }}
+                transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+                className="md:hidden fixed top-0 left-0 bottom-0 w-72 bg-white z-50 flex flex-col shadow-2xl"
+              >
+                <div className="flex items-center justify-between px-4 h-14 border-b border-gray-light">
+                  <span className="font-display font-bold text-navy text-lg">Selam</span>
+                  <button onClick={() => setMobileOpen(false)} className="p-2 rounded-lg hover:bg-gray-light">
+                    <X className="h-5 w-5 text-gray" />
+                  </button>
+                </div>
+                <nav className="flex flex-col gap-1 p-3 flex-1">
+                  {navLinks.map(link => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        'flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors font-medium text-sm',
+                        pathname === link.href
+                          ? 'bg-teal-light text-teal'
+                          : 'text-gray hover:bg-gray-light hover:text-navy'
+                      )}
+                    >
+                      <link.icon className="h-5 w-5 shrink-0" />
+                      <span>{link.label}</span>
+                    </Link>
+                  ))}
+                </nav>
+                <div className="p-3 border-t border-gray-light">
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-sm font-medium text-gray hover:bg-red-50 hover:text-red-600 transition-colors"
+                  >
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        <main className="flex-1 overflow-y-auto p-6 pt-20 md:pt-6">
           <div className="max-w-4xl mx-auto space-y-6">
             {/* Greeting */}
             <div>
