@@ -2,13 +2,13 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { ArrowRight, Brain, QrCode, Shield, Globe, ChevronRight } from 'lucide-react';
+import { ArrowRight, Brain, QrCode, Shield, Globe, ChevronRight, ArrowDown } from 'lucide-react';
 import { NFCDemo } from '@/components/ui/NFCDemo';
 import { VideoIntroModal } from '@/components/ui/VideoIntroModal';
 
@@ -32,63 +32,57 @@ function useCounter(target: number, duration = 2000) {
 }
 
 const HERO_IMAGES = [
-  '/Mental_health_awareness_-_Main.jpg', 
-  '/Health_Internet_header.jpg', // fitness/health
-  'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1920&q=80', // medical/wellness
-];
-
-const HERO_HEADLINES = [
-  'Wellbeing starts with connection',
-  'ደህንነት የሚጀምረው በግንኙነት ነው',
-  'ድሕነት ብርክክብ ይጅምር',
-  'Nageenyi walitti dhufeenyaan jalqaba',
-];
-
-const PRICING_PLANS = [
-  {
-    name: 'Free',
-    price: '0',
-    period: '/month',
-    description: 'Get started with essential wellness tools',
-    features: ['AI Wellness Chat (5/day)', 'Health ID & QR Code', 'Emergency Contacts (3)', 'Awareness Feed'],
-    cta: 'Get Started',
-    highlight: false,
-  },
-  {
-    name: 'Premium',
-    price: '99',
-    period: 'ETB/month',
-    description: 'Full wellness journey with unlimited access',
-    features: ['Unlimited AI Chat', 'Mood Tracking & Analytics', 'Unlimited Emergency Contacts', 'Priority Support', 'Hospital Map'],
-    cta: 'Start Premium',
-    highlight: true,
-  },
-  {
-    name: 'Doctor',
-    price: '299',
-    period: 'ETB/month',
-    description: 'Clinical tools for healthcare providers',
-    features: ['QR Patient Scanner', 'Patient Records Access', 'AI Diagnostic Support', 'Diagnosis Management', 'All Premium Features'],
-    cta: 'Join as Doctor',
-    highlight: false,
-  },
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1920&auto=format&fit=crop', // Connection / friendship
+  'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?q=80&w=1920&auto=format&fit=crop', // Professional medical care
+  'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1920&auto=format&fit=crop', // Wellness / peace
+  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1920&auto=format&fit=crop', // Compassion / holding hands
+  'https://images.unsplash.com/photo-1527613426406-031eaf0d885a?q=80&w=1920&auto=format&fit=crop', // Nature / hope
 ];
 
 export default function LandingPage() {
   const locale = useLocale();
+  const t = useTranslations('landing');
   const [heroIndex, setHeroIndex] = useState(0);
-  const [headlineIndex, setHeadlineIndex] = useState(0);
   const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
     const imgTimer = setInterval(() => setHeroIndex(i => (i + 1) % HERO_IMAGES.length), 4000);
-    const txtTimer = setInterval(() => setHeadlineIndex(i => (i + 1) % HERO_HEADLINES.length), 3000);
-    return () => { clearInterval(imgTimer); clearInterval(txtTimer); };
+    return () => clearInterval(imgTimer);
   }, []);
 
   const stat1 = useCounter(1);
   const stat2 = useCounter(4);
   const stat3 = useCounter(80);
+
+  const PRICING_PLANS = [
+    {
+      name: t('pricingFree'),
+      price: '0',
+      period: t('pricingMonth'),
+      description: t('pricingFreeDesc'),
+      features: [t('planFreeFeature1'), t('planFreeFeature2'), t('planFreeFeature3'), t('planFreeFeature4')],
+      cta: t('ctaStart'),
+      highlight: false,
+    },
+    {
+      name: t('pricingPremium'),
+      price: '99',
+      period: t('pricingEtbMonth'),
+      description: t('pricingPremiumDesc'),
+      features: [t('planPremiumFeature1'), t('planPremiumFeature2'), t('planPremiumFeature3'), t('planPremiumFeature4'), t('planPremiumFeature5')],
+      cta: t('ctaStartPremium'),
+      highlight: true,
+    },
+    {
+      name: t('pricingDoctor'),
+      price: '299',
+      period: t('pricingEtbMonth'),
+      description: t('pricingDoctorDesc'),
+      features: [t('planDoctorFeature1'), t('planDoctorFeature2'), t('planDoctorFeature3'), t('planDoctorFeature4'), t('planDoctorFeature5')],
+      cta: t('ctaJoinDoctor'),
+      highlight: false,
+    },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -119,31 +113,32 @@ export default function LandingPage() {
             <div className="min-h-[140px] flex items-center mb-6">
               <AnimatePresence mode="wait">
                 <motion.h1
-                  key={headlineIndex}
+                  key={locale}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.6 }}
                   className="font-display text-4xl sm:text-5xl font-bold text-white leading-tight"
                 >
-                  {HERO_HEADLINES[headlineIndex]}
+                  {t('heroHeadline')}
                 </motion.h1>
               </AnimatePresence>
             </div>
 
             <p className="text-white/70 text-lg mb-8 leading-relaxed">
-              Mental wellness and health network — in your language, at your side. Built for Ethiopia and East Africa.
+              {t('heroTagline')}
             </p>
 
             <div className="flex flex-wrap gap-4 relative">
               <Link href={`/${locale}/auth/signup`}>
                 <Button size="lg" className="teal-glow gap-2">
-                  Get Started Free <ArrowRight className="h-5 w-5" />
+                  {t('ctaStart')} <ArrowRight className="h-5 w-5" />
                 </Button>
               </Link>
               <a href="/app-release.apk" download>
-                <Button size="lg" variant="secondary" className="bg-white/10 text-white hover:bg-white/20 border-white/20 backdrop-blur gap-2">
-                  Download App
+                <Button size="lg" variant="secondary" className="bg-white/10 text-white hover:bg-white/20 border-white/20 backdrop-blur hover-lift gap-2 group">
+                  {t('ctaDownload')}
+                  <ArrowDown className="h-5 w-5 animate-bounce text-teal" />
                 </Button>
               </a>
               <Button 
@@ -155,7 +150,7 @@ export default function LandingPage() {
                   dialog?.showModal();
                 }}
               >
-                Watch Demo
+                {t('ctaDemo')}
               </Button>
 
               {/* Video Modal using native HTML dialog for simplicity and accessibility */}
@@ -204,19 +199,19 @@ export default function LandingPage() {
       {/* Stats section */}
       <section className="bg-dark py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-center font-display text-3xl text-white font-bold mb-12">The Problem We Solve</h2>
+          <h2 className="text-center font-display text-3xl text-white font-bold mb-12">{t('statsTitle')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div ref={stat1.ref}>
               <p className="text-6xl font-bold text-teal font-display mb-2">{stat1.count}</p>
-              <p className="text-white/70">psychiatrist per 1,000,000 people in Ethiopia</p>
+              <p className="text-white/70">{t('stat1Desc')}</p>
             </div>
             <div ref={stat2.ref}>
               <p className="text-6xl font-bold text-teal font-display mb-2">{stat2.count}+</p>
-              <p className="text-white/70">average ER wait time in hours</p>
+              <p className="text-white/70">{t('stat2Desc')}</p>
             </div>
             <div ref={stat3.ref}>
               <p className="text-6xl font-bold text-teal font-display mb-2">{stat3.count}%</p>
-              <p className="text-white/70">of patients arrive with no medical record</p>
+              <p className="text-white/70">{t('stat3Desc')}</p>
             </div>
           </div>
         </div>
@@ -227,16 +222,15 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="flex-1">
-              <span className="text-teal font-semibold text-sm tracking-wide uppercase">Pillar 1</span>
+              <span className="text-teal font-semibold text-sm tracking-wide uppercase">{t('pillar1Tag')}</span>
               <h2 className="font-display text-4xl font-bold text-navy mt-2 mb-4 leading-tight">
-                Mental Wellness, <br />in your language
+                {t('pillar1Title')}
               </h2>
               <p className="text-gray leading-relaxed mb-6">
-                Talk to Selam AI in Amharic, Tigrinya, Afaan Oromoo, or English. Private, judgment-free, and always available.
-                When you need more, connect with a licensed professional.
+                {t('pillar1Desc')}
               </p>
               <ul className="space-y-3">
-                {['Gemini-powered AI companion', 'Anonymous mode available', 'Mood tracking & trend insights', 'Crisis line integration'].map(f => (
+                {[t('pillar1Bullet1'), t('pillar1Bullet2'), t('pillar1Bullet3'), t('pillar1Bullet4')].map(f => (
                   <li key={f} className="flex items-center gap-2 text-sm text-dark">
                     <span className="h-5 w-5 rounded-full bg-teal-light flex items-center justify-center shrink-0">
                       <ChevronRight className="h-3 w-3 text-teal" />
@@ -255,13 +249,13 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <p className="font-semibold text-navy text-sm">Selam AI</p>
-                    <p className="text-[10px] text-teal">● Online</p>
+                    <p className="text-[10px] text-teal">● {t('chatOnline')}</p>
                   </div>
                 </div>
                 {[
-                  { r: 'assistant', msg: 'ሰላም! ዛሬ ምን ይሰማዎታል?' },
-                  { r: 'user', msg: 'I feel a bit overwhelmed lately' },
-                  { r: 'assistant', msg: "I hear you. Let's work through this together..." },
+                  { r: 'assistant', msg: t('chatMsg1') },
+                  { r: 'user', msg: t('chatMsg2') },
+                  { r: 'assistant', msg: t('chatMsg3') },
                 ].map((m, i) => (
                   <div key={i} className={`flex mb-3 ${m.r === 'user' ? 'justify-end' : ''}`}>
                     <div className={`max-w-[80%] px-3 py-2 rounded-xl text-xs ${m.r === 'user' ? 'bg-teal text-white rounded-tr-none' : 'bg-gray-light text-dark rounded-tl-none'}`}>
@@ -285,12 +279,12 @@ export default function LandingPage() {
       <section className="py-20 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-teal font-semibold text-sm tracking-wide uppercase">Pillar 2</span>
+            <span className="text-teal font-semibold text-sm tracking-wide uppercase">{t('pillar2Tag')}</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-navy mt-2 mb-4 leading-tight">
-              Instant medical history <br />with a simple tap
+              {t('pillar2Title')}
             </h2>
             <p className="text-gray text-lg leading-relaxed mb-6">
-              Whether through our dynamic QR code or a quick NFC tap from your locked screen, your medical history is instantly and securely shared with your doctor. No paperwork, no delays.
+              {t('pillar2Desc')}
             </p>
           </div>
           
@@ -343,20 +337,20 @@ export default function LandingPage() {
                   color: '#1A9E7A',
                 }}
               >
-                Video Showcase
+                {t('videoBadge')}
               </span>
             </div>
 
             <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
-              See Selam{' '}
+              {t('videoTitlePrefix')}{' '}
               <span style={{
                 background: 'linear-gradient(90deg, #1A9E7A, #4ECDC4)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-              }}>in action</span>
+              }}>{t('videoTitleHighlight')}</span>
             </h2>
             <p className="text-white/45 text-lg leading-relaxed">
-              Watch how Selam bridges the gap between patients and quality care — delivering AI wellness, instant health ID, and emergency-ready records across East Africa.
+              {t('videoDesc')}
             </p>
           </motion.div>
 
@@ -408,8 +402,8 @@ export default function LandingPage() {
       <section className="py-20 bg-teal-light" id="pricing">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h2 className="font-display text-4xl font-bold text-navy mb-3">Simple, Transparent Pricing</h2>
-            <p className="text-gray">Priced for Ethiopian and East African communities</p>
+            <h2 className="font-display text-4xl font-bold text-navy mb-3">{t('pricingTitle')}</h2>
+            <p className="text-gray">{t('pricingDesc')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {PRICING_PLANS.map((plan, i) => (
@@ -422,7 +416,7 @@ export default function LandingPage() {
               >
                 <Card className={`p-6 h-full flex flex-col ${plan.highlight ? 'border-2 border-teal shadow-lg' : ''}`}>
                   {plan.highlight && (
-                    <div className="bg-teal text-white text-xs font-bold px-3 py-1 rounded-full w-fit mb-4">Most Popular</div>
+                    <div className="bg-teal text-white text-xs font-bold px-3 py-1 rounded-full w-fit mb-4">{t('pricingPopular')}</div>
                   )}
                   <h3 className="font-display text-2xl font-bold text-navy mb-1">{plan.name}</h3>
                   <div className="flex items-baseline gap-1 mb-2">

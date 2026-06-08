@@ -73,9 +73,9 @@ export function Navbar({ user }: NavbarProps) {
         <div className="hidden md:flex items-center gap-6">
           {!user && (
             <>
-              <Link href={`/${locale}/`} className="text-sm text-gray hover:text-navy transition-colors">Home</Link>
-              <Link href={`/${locale}/pricing`} className="text-sm text-gray hover:text-navy transition-colors">Pricing</Link>
-              <Link href={`/${locale}/about`} className="text-sm text-gray hover:text-navy transition-colors">About</Link>
+              <Link href={`/${locale}/`} className="text-sm text-gray hover:text-navy transition-colors">{t('home')}</Link>
+              <Link href={`/${locale}/pricing`} className="text-sm text-gray hover:text-navy transition-colors">{t('pricing')}</Link>
+              <Link href={`/${locale}/about`} className="text-sm text-gray hover:text-navy transition-colors">{t('about')}</Link>
             </>
           )}
           {user && (
@@ -120,10 +120,10 @@ export function Navbar({ user }: NavbarProps) {
           ) : (
             <div className="hidden md:flex items-center gap-2">
               <Link href={`/${locale}/auth/login`}>
-                <Button variant="ghost" size="sm">Log in</Button>
+                <Button variant="ghost" size="sm">{t('login')}</Button>
               </Link>
               <Link href={`/${locale}/auth/signup`}>
-                <Button variant="primary" size="sm" className="teal-glow">Sign up</Button>
+                <Button variant="primary" size="sm" className="teal-glow">{t('signup')}</Button>
               </Link>
             </div>
           )}
@@ -148,13 +148,13 @@ export function Navbar({ user }: NavbarProps) {
         >
           {!user && (
             <>
-              <Link href={`/${locale}/pricing`} onClick={() => setMenuOpen(false)} className="text-navy font-medium">Pricing</Link>
-              <Link href={`/${locale}/about`} onClick={() => setMenuOpen(false)} className="text-navy font-medium">About</Link>
+              <Link href={`/${locale}/pricing`} onClick={() => setMenuOpen(false)} className="text-navy font-medium">{t('pricing')}</Link>
+              <Link href={`/${locale}/about`} onClick={() => setMenuOpen(false)} className="text-navy font-medium">{t('about')}</Link>
               <Link href={`/${locale}/auth/login`} onClick={() => setMenuOpen(false)}>
-                <Button variant="secondary" className="w-full">Log in</Button>
+                <Button variant="secondary" className="w-full">{t('login')}</Button>
               </Link>
               <Link href={`/${locale}/auth/signup`} onClick={() => setMenuOpen(false)}>
-                <Button variant="primary" className="w-full">Sign up</Button>
+                <Button variant="primary" className="w-full">{t('signup')}</Button>
               </Link>
             </>
           )}
